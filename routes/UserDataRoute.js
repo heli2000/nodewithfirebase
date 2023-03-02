@@ -1,4 +1,5 @@
 import { Router } from "express";
+import FileUploadController from "../controllers/FileUploadController.js";
 import UserDataController from "../controllers/UserDataController.js";
 import UserLoginController from "../controllers/UserLoginController.js";
 import UserRegisterController from "../controllers/UserRegisterController.js";
@@ -19,6 +20,8 @@ router.post(
   UserRegisterController.userRegisterWithEmailPassword
 );
 router.post("/user/login", UserLoginController.userLogin);
+
+router.post("/profile/photo", FileUploadController.fileUpload);
 // router.get("/user/login/google", UserLoginController.userLoginWithGoogle);
 
 export default router;

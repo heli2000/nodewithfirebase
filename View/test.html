@@ -1,0 +1,49 @@
+<html>
+
+<head>
+    <!-- <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id"
+        content="468243022884-o36rt7l62pd8rf7lqalgbca9h4o3k1m6.apps.googleusercontent.com"> -->
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" crossorigin="anonymous"></script>
+
+
+</head>
+
+<body>
+    <a onclick="openGoogle()">Login with google</a>
+    <!-- <div class="g-signin2" data-onsuccess="onSignIn"></div> -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <div id="g_id_onload" data-client_id="468243022884-o36rt7l62pd8rf7lqalgbca9h4o3k1m6.apps.googleusercontent.com"
+        data-callback="handleCredentialResponse">
+    </div>
+    <div class="g_id_signin" data-type="standard"></div>
+
+</body>
+
+</html>
+
+<script>
+    // const onSignIn = (data) => {
+    //     console.log(data);
+    //     // $.ajax({
+    //     //     url: 'http://localhost:3009/user/login/google', success: function (params) {
+    //     //         console.log(params);
+    //     //     }
+    //     // })
+    // }
+
+    function onSignIn(googleUser) {
+        var profile = googleUser.getBasicProfile();
+        console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+        console.log('Name: ' + profile.getName());
+        console.log('Image URL: ' + profile.getImageUrl());
+        console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+    }
+    function handleCredentialResponse(user) {
+        console.log(user);
+    }
+    // const signInButton = document.querySelector('.g-signin2');
+    // signInButton.addEventListener('click', () => {
+    //     gapi.auth2.getAuthInstance().signIn();
+    // });
+</script>

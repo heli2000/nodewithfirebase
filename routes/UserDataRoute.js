@@ -22,6 +22,7 @@ router.post(
 router.post("/user/login", UserLoginController.userLogin);
 
 router.post("/profile/photo", FileUploadController.fileUpload);
-// router.get("/user/login/google", UserLoginController.userLoginWithGoogle);
+
+router.post("/user/location", UserRegisterController.getAllUserFromLocation);
 
 export default router;

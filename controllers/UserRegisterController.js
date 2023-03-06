@@ -1,5 +1,6 @@
+import { booleanPointInPolygon } from "@turf/turf";
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, getDocs } from "firebase/firestore";
 import { db } from "../db_config/config.js";
 import FileUploadController from "./FileUploadController.js";
 
@@ -22,13 +23,58 @@ const userRegisterWithEmailPassword = async (req, res) => {
       );
       imgPath = uploadedFile.metadata.fullPath;
     }
-    const newDocRef = await addDoc(usersRef, {
+    let locationId;
+
+    await addDoc(usersRef, {
       name: req.body.name,
-      location: req.body.location,
-      useid: user.uid,
+      uid: user.uid,
       profile_path: imgPath !== undefined ? imgPath : "",
     });
-    res.send(newDocRef);
+
+    if (req.body.location) {
+      locationId = await spatialJSONDataStore(req.body.location, user.uid);
+    }
+
+    res.send({ message: "user added successfully" });
+  } catch (error) {
+    res.send(error);
+  }
+};
+
+const spatialJSONDataStore = async (data, id) => {
+  try {
+    const feature = JSON.parse(data);
+    if (feature) {
+      let featureData = {
+        uid: id,
+        spatial: { ...feature },
+      };
+      const polyref = collection(db, "userLocation");
+      const newData = await addDoc(polyref, featureData);
+      return newData;
+    }
+  } catch (error) {
+    return error;
+  }
+};
+
+const getAllUserFromLocation = async (req, res) => {
+  try {
+    const polyref = collection(db, "userLocation");
+    const users = await getDocs(polyref);
+
+    const wkt = JSON.parse(req.body.wkt);
+    const intersectUser = [];
+
+    users.forEach((e) => {
+      const intersect = booleanPointInPolygon(
+        e.data().spatial.features[0].geometry,
+        wkt.features[0].geometry
+      );
+      if (intersect) intersectUser.push(e.data().uid);
+    });
+
+    res.send(intersectUser);
   } catch (error) {
     res.send(error);
   }
@@ -36,6 +82,7 @@ const userRegisterWithEmailPassword = async (req, res) => {
 
 const UserRegisterController = {
   userRegisterWithEmailPassword,
+  getAllUserFromLocation,
 };
 
 export default UserRegisterController;

@@ -1,10 +1,9 @@
 import { booleanPointInPolygon } from "@turf/turf";
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { addDoc, collection, getDocs } from "firebase/firestore";
-import { db } from "../db_config/config.js";
+import { auth, db } from "../db_config/ClientConfig.js";
 import FileUploadController from "./FileUploadController.js";
 
-const auth = getAuth();
 const usersRef = collection(db, "usersData");
 
 const userRegisterWithEmailPassword = async (req, res) => {

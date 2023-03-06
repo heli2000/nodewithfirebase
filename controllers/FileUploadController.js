@@ -1,4 +1,4 @@
-import { app } from "../db_config/config.js";
+import { app } from "../db_config/ClientConfig.js";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 
 const fileUpload = async (file, filename) => {

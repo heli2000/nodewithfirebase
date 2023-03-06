@@ -7,7 +7,7 @@ import {
   getDocs,
   updateDoc,
 } from "firebase/firestore";
-import { db } from "../db_config/config.js";
+import { db } from "../db_config/ClientConfig.js";
 import { Users } from "../models/UserDataModal.js";
 
 const usersRef = collection(db, "usersData");
